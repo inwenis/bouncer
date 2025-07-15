@@ -1,5 +1,6 @@
 const express = require('express')
 const logger = require('pino')()
+const axios = require('axios')
 
 const app = express()
 const port = 3000
@@ -21,6 +22,9 @@ app.get('/bounce/:package', (req, res) => {
     logger.info('GET: /bounce/%s', req.params.package)
     const newPackage = performMagic(req.params.package)
     logger.info('new package: %s', newPackage)
+    // do not await the call as we do not care about the response
+    // we just want to send a request to the next node
+    axios.get(`${NEXT_NODE}/bounce/${newPackage}`)
     res.send(`ok`)
 })
 
