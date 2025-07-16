@@ -14,7 +14,7 @@ function performMagic(package) {
 }
 
 app.get('/', (req, res) => {
-    logger.info('hello world')
+    logger.info('GET: /')
     res.send('Hello World!')
 })
 
