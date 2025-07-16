@@ -3,7 +3,7 @@ const logger = require('pino')()
 const axios = require('axios')
 
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 
 const NEXT_NODE = process.env.NEXT_NODE || 'http://localhost:3000'
 
