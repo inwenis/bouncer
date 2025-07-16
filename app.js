@@ -29,5 +29,5 @@ app.get('/bounce/:package', (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    logger.info(`Bouncer listening at http://localhost:${port}`)
 })
