@@ -32,12 +32,21 @@ app.get('/', (req, res) => {
   `)
 })
 
-app.get('/bounce/:package', (req, res) => {
+app.get('/bounce/:package', async (req, res) => {
     currentPackage = randomizeNewNumber(req.params.package)
     // do not await the call as we do not care about the response
     // we just want to send a request to the next node
-    axios.get(`${NEXT_NODE}/bounce/${currentPackage}`)
+    const promise = axios.get(`${NEXT_NODE}/bounce/${currentPackage}`)
     res.send(`ok`)
+    try {
+        await promise
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            logger.error({url: error.config.url}, `Error bouncing package: ${error.message}`)
+        } else {
+            logger.error(`Error bouncing package: ${error.message}`)
+        }
+    }
 })
 
 app.get('/stream', (req, res) => {
