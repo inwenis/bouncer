@@ -10,8 +10,8 @@ const NEXT_NODE = process.env.NEXT_NODE || 'http://localhost:3000'
 let currentPackage = null
 
 function performMagic(package) {
-    const randomNumber = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-    return randomNumber;
+    const randomNumber = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
+    return randomNumber
 }
 
 app.get('/', (req, res) => {
@@ -23,10 +23,10 @@ app.get('/', (req, res) => {
                 <h1>Bouncer</h1>
                 <pre id="output"></pre>
                 <script>
-                    const eventSource = new EventSource('/stream');
+                    const eventSource = new EventSource('/stream')
                     eventSource.onmessage = function(event) {
-                        document.getElementById('output').textContent = event.data + "\\n";
-                    };
+                        document.getElementById('output').textContent = event.data + "\\n"
+                    }
                 </script>
             </body>
         </html>
@@ -50,18 +50,18 @@ app.get('/stream', (req, res) => {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
         'Connection': 'keep-alive'
-    });
-    res.flushHeaders();
+    })
+    res.flushHeaders()
 
     const interval = setInterval(() => {
-        res.write(`data: ${currentPackage}\n\n`);
-    }, 1000);
+        res.write(`data: ${currentPackage}\n\n`)
+    }, 1000)
 
     req.on('close', () => {
-        clearInterval(interval);
-        res.end();
-    });
-});
+        clearInterval(interval)
+        res.end()
+    })
+})
 
 app.listen(port, () => {
     logger.info(`Bouncer listening at http://localhost:${port}`)
