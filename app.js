@@ -10,7 +10,6 @@ const NEXT_NODE = process.env.NEXT_NODE || 'http://localhost:3000'
 let currentPackage = null
 
 function performMagic(package) {
-    logger.info('performing magic on package: %s', package)
     const randomNumber = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
     return randomNumber;
 }
@@ -36,9 +35,9 @@ app.get('/', (req, res) => {
 
 app.get('/bounce/:package', (req, res) => {
     currentPackage = req.params.package
-    logger.info('GET: /bounce/%s', req.params.package)
+    logger.debug('GET: /bounce/%s', req.params.package)
     const newPackage = performMagic(req.params.package)
-    logger.info('new package: %s', newPackage)
+    logger.debug('new package: %s', newPackage)
     // do not await the call as we do not care about the response
     // we just want to send a request to the next node
     currentPackage = newPackage
