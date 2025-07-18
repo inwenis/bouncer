@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/bounce/:package', async (req, res) => {
-    currentPackage = randomizeNewNumber(req.params.package)
+    currentPackage = randomizeNewNumber()
     // do not await the call as we do not care about the response
     // we just want to send a request to the next node
     const promise = axios.get(`${NEXT_NODE}/bounce/${currentPackage}`)
