@@ -39,7 +39,12 @@ app.get('/bounce/:number', async (req, res) => {
         bounceCount: 0,
         number: req.params.number
     }
-    const promise = axios.post(`${NEXT_NODE}/bounce`, initialPackage)
+    const promise = axios({
+        method: 'post',
+        url: `${NEXT_NODE}/bounce`,
+        data: initialPackage,
+        headers: { 'Content-Type': 'application/json' }
+    })
     res.send(`ok`)
     try {
         await promise
