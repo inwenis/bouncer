@@ -14,6 +14,8 @@ function randomizeNewNumber() {
     return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
 }
 
+app.use(express.json())
+
 app.get('/', (req, res) => {
     logger.info('GET: /')
     res.send(`
@@ -88,7 +90,6 @@ app.get('/stream', (req, res) => {
     })
 })
 
-app.use(express.json())
 app.listen(port, () => {
     logger.info(`Bouncer listening at http://localhost:${port}`)
 })
