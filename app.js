@@ -77,7 +77,7 @@ app.get('/stream', (req, res) => {
     res.flushHeaders()
 
     const interval = setInterval(() => {
-        res.write(`data: ${currentPackage}\n\n`)
+        res.write(`data: ${JSON.stringify(currentPackage)}\n\n`)
     }, 1000)
 
     req.on('close', () => {
