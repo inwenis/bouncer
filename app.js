@@ -61,9 +61,6 @@ app.get('/bounce/:number', async (req, res) => {
 
 app.post('/bounce', async (req, res) => {
     const p = req.body
-    console.log(p.start)
-    console.log(p.bounceCount)
-    console.log(p.number)
 
     p.bounceCount += 1
     p.number = randomizeNewNumber(p.number)
