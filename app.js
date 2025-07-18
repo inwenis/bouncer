@@ -2,6 +2,7 @@ const express = require('express')
 const logger = require('pino')()
 const axios = require('axios')
 const { AxiosError } = require('axios')
+const humanizeDuration = require('humanize-duration')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -77,7 +78,16 @@ app.get('/stream', (req, res) => {
     res.flushHeaders()
 
     const interval = setInterval(() => {
-        res.write(`data: ${JSON.stringify(currentPackage)}\n\n`)
+        const now = Date.now()
+        if (currentPackage) {
+            const packageToBeSent = {
+                ...currentPackage,
+                elapsed: humanizeDuration(now - currentPackage.start),
+                lastUpdated: new Date(now).toISOString()
+            }
+            res.write(`data: ${JSON.stringify(packageToBeSent)}\n\n`)
+        }
+
     }, 1000)
 
     req.on('close', () => {
