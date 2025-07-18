@@ -1,6 +1,7 @@
 const express = require('express')
 const logger = require('pino')()
 const axios = require('axios')
+const { AxiosError } = require('axios')
 
 const app = express()
 const port = process.env.PORT || 3000
