@@ -33,11 +33,13 @@ app.get('/', (req, res) => {
   `)
 })
 
-app.get('/bounce/:package', async (req, res) => {
-    currentPackage = randomizeNewNumber()
-    // do not await the call as we do not care about the response
-    // we just want to send a request to the next node
-    const promise = axios.get(`${NEXT_NODE}/bounce/${currentPackage}`)
+app.get('/bounce/:number', async (req, res) => {
+    const initialPackage = {
+        start: Date.now(),
+        bounceCount: 0,
+        number: req.params.number
+    }
+    const promise = axios.post(`${NEXT_NODE}/bounce`, initialPackage)
     res.send(`ok`)
     try {
         await promise
@@ -48,6 +50,19 @@ app.get('/bounce/:package', async (req, res) => {
             logger.error(`Error bouncing package: ${error.message}`)
         }
     }
+})
+
+app.post('/bounce', async (req, res) => {
+    const p = req.body
+    console.log(p.start)
+    console.log(p.bounceCount)
+    console.log(p.number)
+
+    p.bounceCount += 1
+    p.number = randomizeNewNumber(p.number)
+
+    axios.post(`${NEXT_NODE}/bounce`, p)
+    res.send(`ok`)
 })
 
 app.get('/stream', (req, res) => {
@@ -68,6 +83,7 @@ app.get('/stream', (req, res) => {
     })
 })
 
+app.use(express.json())
 app.listen(port, () => {
     logger.info(`Bouncer listening at http://localhost:${port}`)
 })
