@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
-    "node": "=23.5.0"
+    "node": "23.x"
   },
   "dependencies": {
     "axios": "^1.10.0",
