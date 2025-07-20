@@ -53,7 +53,7 @@ app.get('/bounce/:number', async (req, res) => {
         await promise
     } catch (error) {
         if (error instanceof AxiosError) {
-            logger.error({url: error.config.url}, `Error bouncing package: ${error.message}`)
+            logger.error({ url: error.config.url }, `Error bouncing package: ${error.message}`)
         } else {
             logger.error(`Error bouncing package: ${error.message}`)
         }
