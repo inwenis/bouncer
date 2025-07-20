@@ -69,7 +69,7 @@ app.post('/bounce', async (req, res) => {
     p.bounceCount += 1
     p.number = randomizeNewNumber(p.number)
     currentPackage = p
-    axios.post(`${NEXT_NODE}/bounce`, p)
+    bouncePackage(NEXT_NODE, currentPackage)
     res.send(`ok`)
 })
 
