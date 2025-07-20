@@ -9,10 +9,34 @@ const port = process.env.PORT || 3000
 
 const NEXT_NODE = process.env.NEXT_NODE || 'http://localhost:3000'
 
+const initialPackage = {
+    start: Date.now(),
+    bounceCount: 0,
+    number: 42
+}
 let currentPackage = null
 
 function randomizeNewNumber() {
     return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
+}
+
+async function bouncePackage(dest, pacakge) {
+    try {
+        await axios({
+            method: 'post',
+            url: `${dest}/bounce`,
+            data: pacakge,
+            headers: { 'Content-Type': 'application/json' }
+        })
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            logger.error({ url: error.config.url }, `Error bouncing package: ${error.message}`)
+        } else {
+            logger.error(`Error bouncing package: ${error.message}`)
+        }
+        return 'error'
+    }
+    return 'ok'
 }
 
 app.use(express.json())
@@ -37,27 +61,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/bounce/:number', async (req, res) => {
-    const initialPackage = {
-        start: Date.now(),
-        bounceCount: 0,
-        number: req.params.number
-    }
-    const promise = axios({
-        method: 'post',
-        url: `${NEXT_NODE}/bounce`,
-        data: initialPackage,
-        headers: { 'Content-Type': 'application/json' }
-    })
-    res.send(`ok`)
-    try {
-        await promise
-    } catch (error) {
-        if (error instanceof AxiosError) {
-            logger.error({ url: error.config.url }, `Error bouncing package: ${error.message}`)
-        } else {
-            logger.error(`Error bouncing package: ${error.message}`)
-        }
-    }
+    const result = await bouncePackage(NEXT_NODE, initialPackage)
+    res.send(result)
 })
 
 app.post('/bounce', async (req, res) => {
