@@ -4,12 +4,10 @@ const axios = require('axios')
 const { AxiosError } = require('axios')
 const humanizeDuration = require('humanize-duration')
 
-const app = express()
-const port = process.env.PORT || 3000
-
+const PORT = process.env.PORT || 3000
 const NEXT_NODE = process.env.NEXT_NODE || 'http://localhost:3000'
-
-const initialPackage = {
+const AUTO_START_BOUNCE = process.env.AUTO_START_BOUNCE || false
+const INITIAL_PACKAGE = {
     start: Date.now(),
     bounceCount: 0,
     number: 42
@@ -39,6 +37,7 @@ async function bouncePackage(dest, pacakge) {
     return 'ok'
 }
 
+const app = express()
 app.use(express.json())
 
 app.get('/', (req, res) => {
@@ -61,7 +60,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/bounce/:number', async (req, res) => {
-    const result = await bouncePackage(NEXT_NODE, initialPackage)
+    const result = await bouncePackage(NEXT_NODE, INITIAL_PACKAGE)
     res.send(result)
 })
 
@@ -101,6 +100,15 @@ app.get('/stream', (req, res) => {
     })
 })
 
-app.listen(port, () => {
-    logger.info(`Bouncer listening at http://localhost:${port}`)
+app.listen(PORT, () => {
+    logger.info(`Bouncer listening at http://localhost:${PORT}`)
 })
+
+if (AUTO_START_BOUNCE) {
+    logger.info('AUTO_START_BOUNCE is enabled, starting bounce process in 10 seconds...')
+    setTimeout(async () => {
+        logger.info('Bouncing initial package to next node...')
+        const result = await bouncePackage(NEXT_NODE, INITIAL_PACKAGE)
+        logger.info(`Initial package bounce result: ${result}`)
+    }, 10_000)
+}
