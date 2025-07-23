@@ -100,9 +100,9 @@ app.get('/stream', (req, res) => {
     })
 })
 
-app.listen(PORT, () => {
-    logger.info(`Bouncer listening at http://localhost:${PORT}`)
-})
+app.listen(PORT)
+
+logger.info(`Bouncer listening at http://localhost:${PORT}`)
 
 if (AUTO_START_BOUNCE) {
     logger.info('AUTO_START_BOUNCE is enabled, starting bounce process in 10 seconds...')
