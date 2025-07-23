@@ -22,7 +22,8 @@ const index = `
         <script>
             const eventSource = new EventSource('/stream')
             eventSource.onmessage = function(event) {
-                document.getElementById('output').textContent = event.data + "\\n"
+                const formatted = event.data.replaceAll('\\\\n', '\\n')
+                document.getElementById('output').textContent = formatted + "\\n"
             }
         </script>
     </body>
@@ -75,7 +76,7 @@ function sendUpdate(res) {
                 elapsed: humanizeDuration(now - currentPackage.start),
                 lastUpdated: new Date(now).toISOString()
             }
-            const asAstring = JSON.stringify(updated)
+            const asAstring = JSON.stringify(updated, null, 2).replaceAll('\n', '\\n')
             res.write(`data: ${asAstring}\n\n`)
         }
     }
