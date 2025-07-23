@@ -37,6 +37,17 @@ async function bouncePackage(dest, pacakge) {
     return 'ok'
 }
 
+function autoStartBounce() {
+    if (AUTO_START_BOUNCE) {
+        logger.info('AUTO_START_BOUNCE is enabled, starting bounce process in 10 seconds...')
+        setTimeout(async () => {
+            logger.info('Bouncing initial package to next node...')
+            const result = await bouncePackage(NEXT_NODE, INITIAL_PACKAGE)
+            logger.info(`Initial package bounce result: ${result}`)
+        }, 10000)
+    }
+}
+
 const app = express()
 app.use(express.json())
 
@@ -104,11 +115,4 @@ app.listen(PORT)
 
 logger.info(`Bouncer listening at http://localhost:${PORT}`)
 
-if (AUTO_START_BOUNCE) {
-    logger.info('AUTO_START_BOUNCE is enabled, starting bounce process in 10 seconds...')
-    setTimeout(async () => {
-        logger.info('Bouncing initial package to next node...')
-        const result = await bouncePackage(NEXT_NODE, INITIAL_PACKAGE)
-        logger.info(`Initial package bounce result: ${result}`)
-    }, 10_000)
-}
+autoStartBounce()
