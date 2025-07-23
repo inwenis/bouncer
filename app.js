@@ -12,6 +12,22 @@ const INITIAL_PACKAGE = {
     bounceCount: 0,
     number: 42
 }
+
+const index = `
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Bouncer</h1>
+        <pre id="output"></pre>
+        <script>
+            const eventSource = new EventSource('/stream')
+            eventSource.onmessage = function(event) {
+                document.getElementById('output').textContent = event.data + "\\n"
+            }
+        </script>
+    </body>
+</html>`
+
 let currentPackage = null
 
 function randomizeNewNumber() {
@@ -53,21 +69,7 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
     logger.info('GET: /')
-    res.send(`
-        <!DOCTYPE html>
-        <html>
-            <body>
-                <h1>Bouncer</h1>
-                <pre id="output"></pre>
-                <script>
-                    const eventSource = new EventSource('/stream')
-                    eventSource.onmessage = function(event) {
-                        document.getElementById('output').textContent = event.data + "\\n"
-                    }
-                </script>
-            </body>
-        </html>
-  `)
+    res.send(index)
 })
 
 app.get('/bounce/:number', async (req, res) => {
