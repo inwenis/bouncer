@@ -4,8 +4,8 @@ const axios = require('axios')
 const { AxiosError } = require('axios')
 const humanizeDuration = require('humanize-duration')
 
-const PORT = process.env.PORT || 3000
-const NEXT_NODE = process.env.NEXT_NODE || 'http://localhost:3000'
+const PORT              = process.env.PORT              || 3000
+const NEXT_NODE         = process.env.NEXT_NODE         || 'http://localhost:3000'
 const AUTO_START_BOUNCE = process.env.AUTO_START_BOUNCE || false
 const INITIAL_PACKAGE = {
     start: Date.now(),
