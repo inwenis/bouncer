@@ -34,12 +34,12 @@ function randomizeNewNumber() {
     return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
 }
 
-async function bouncePackage(dest, pacakge) {
+async function safePostBounce(dest, package) {
     try {
         await axios({
             method: 'post',
             url: `${dest}/bounce`,
-            data: pacakge,
+            data: package,
             headers: { 'Content-Type': 'application/json' }
         })
     } catch (error) {
@@ -58,10 +58,52 @@ function autoStartBounce() {
         logger.info('AUTO_START_BOUNCE is enabled, starting bounce process in 10 seconds...')
         setTimeout(async () => {
             logger.info('Bouncing initial package to next node...')
-            const result = await bouncePackage(NEXT_NODE, INITIAL_PACKAGE)
+            const result = await safePostBounce(NEXT_NODE, INITIAL_PACKAGE)
             logger.info(`Initial package bounce result: ${result}`)
         }, 10000)
+    } else {
+        logger.info('AUTO_START_BOUNCE is disabled, no initial bounce will occur.')
     }
+}
+
+function sendUpdate(res) {
+    return () => {
+        if (currentPackage) {
+            const now = Date.now()
+            const updated = {
+                ...currentPackage,
+                elapsed: humanizeDuration(now - currentPackage.start),
+                lastUpdated: new Date(now).toISOString()
+            }
+            const asAstring = JSON.stringify(updated)
+            res.write(`data: ${asAstring}\n\n`)
+        }
+    }
+}
+
+function startEventStream(res) {
+    res.set({
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive'
+    })
+    res.flushHeaders()
+}
+
+function startUpdateTimer(res, req, delay) {
+    const interval = setInterval(sendUpdate(res), delay)
+
+    req.on('close', () => {
+        clearInterval(interval)
+        res.end()
+    })
+}
+
+function processAndForward(incommingPackage) {
+    incommingPackage.bounceCount += 1
+    incommingPackage.number = randomizeNewNumber(incommingPackage.number)
+    currentPackage = incommingPackage
+    safePostBounce(NEXT_NODE, currentPackage)
 }
 
 const app = express()
@@ -72,45 +114,16 @@ app.get('/', (req, res) => {
     res.send(index)
 })
 
-app.get('/bounce/:number', async (req, res) => {
-    const result = await bouncePackage(NEXT_NODE, INITIAL_PACKAGE)
-    res.send(result)
+app.get('/stream', (req, res) => {
+    logger.info('GET: /stream')
+    startEventStream(res)
+    startUpdateTimer(res, req, 1000)
 })
 
 app.post('/bounce', async (req, res) => {
-    const p = req.body
-    p.bounceCount += 1
-    p.number = randomizeNewNumber(p.number)
-    currentPackage = p
-    bouncePackage(NEXT_NODE, currentPackage)
-    res.send(`ok`)
-})
-
-app.get('/stream', (req, res) => {
-    res.set({
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive'
-    })
-    res.flushHeaders()
-
-    const interval = setInterval(() => {
-        const now = Date.now()
-        if (currentPackage) {
-            const packageToBeSent = {
-                ...currentPackage,
-                elapsed: humanizeDuration(now - currentPackage.start),
-                lastUpdated: new Date(now).toISOString()
-            }
-            res.write(`data: ${JSON.stringify(packageToBeSent)}\n\n`)
-        }
-
-    }, 1000)
-
-    req.on('close', () => {
-        clearInterval(interval)
-        res.end()
-    })
+    logger.debug('POST: /bounce') // log as debug to avoid flooding logs
+    processAndForward(req.body)
+    res.send('ok')
 })
 
 app.listen(PORT)
