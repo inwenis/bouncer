@@ -1,6 +1,7 @@
 const express = require('express')
 const pino = require('pino')
 const axios = require('axios')
+const axiosRetry = require('axios-retry').default;
 const { AxiosError } = require('axios')
 const humanizeDuration = require('humanize-duration')
 
@@ -17,6 +18,8 @@ const logger = pino({
     }
   }
 })
+
+axiosRetry(axios, { retries: 3 })
 
 const PORT              = process.env.PORT              || 3000
 const NEXT_NODE         = process.env.NEXT_NODE         || 'http://localhost:3000'
