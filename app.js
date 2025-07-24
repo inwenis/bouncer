@@ -4,6 +4,7 @@ const axios = require('axios')
 const { AxiosError } = require('axios')
 const humanizeDuration = require('humanize-duration')
 
+// specify timezone so logs are in the same tz regardless of machine
 process.env.TZ = "Europe/Warsaw"
 
 // I use pino-pretty also in produciton because it's easier to work with logs in render.com
