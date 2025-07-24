@@ -30,22 +30,6 @@ const INITIAL_PACKAGE = {
     number: 42
 }
 
-const index = `
-<!DOCTYPE html>
-<html>
-    <body>
-        <h1>Bouncer</h1>
-        <pre id="output"></pre>
-        <script>
-            const eventSource = new EventSource('/stream')
-            eventSource.onmessage = function(event) {
-                const formatted = event.data.replaceAll('\\\\n', '\\n')
-                document.getElementById('output').textContent = formatted + "\\n"
-            }
-        </script>
-    </body>
-</html>`
-
 let currentPackage = null
 
 function randomizeNewNumber() {
@@ -129,7 +113,7 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
     logger.info('GET: /')
-    res.send(index)
+    res.sendFile(__dirname + '/index.html')
 })
 
 app.get('/stream', (req, res) => {
