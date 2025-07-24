@@ -2,7 +2,15 @@
 <html>
     <body>
         <h1>Bouncer</h1>
-        <pre id="output"></pre>
+        <pre id="output">
+{
+  "start": ...
+  "bounceCount": ...
+  "number": ...
+  "elapsed": ...
+  "lastUpdated": ...
+}
+        </pre>
         <script>
             const eventSource = new EventSource('/stream')
             eventSource.onmessage = function(event) {
