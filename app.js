@@ -1,8 +1,19 @@
 const express = require('express')
-const logger = require('pino')()
+const pino = require('pino')
 const axios = require('axios')
 const { AxiosError } = require('axios')
 const humanizeDuration = require('humanize-duration')
+
+// I use pino-pretty also in produciton because it's easier to work with logs in render.com
+// in prettyfied format
+const logger = pino({
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: false
+    }
+  }
+})
 
 const PORT              = process.env.PORT              || 3000
 const NEXT_NODE         = process.env.NEXT_NODE         || 'http://localhost:3000'
