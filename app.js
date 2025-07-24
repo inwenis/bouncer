@@ -4,6 +4,8 @@ const axios = require('axios')
 const { AxiosError } = require('axios')
 const humanizeDuration = require('humanize-duration')
 
+process.env.TZ = "Europe/Warsaw"
+
 // I use pino-pretty also in produciton because it's easier to work with logs in render.com
 // in prettyfied format
 const logger = pino({
