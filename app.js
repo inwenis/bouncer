@@ -19,7 +19,7 @@ const logger = pino({
   }
 })
 
-axiosRetry(axios, { retries: 3 })
+axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay })
 
 const PORT              = process.env.PORT              || 3000
 const NEXT_NODE         = process.env.NEXT_NODE         || 'http://localhost:3000'
