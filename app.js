@@ -101,7 +101,10 @@ function startUpdateTimer(res, req, delay) {
     })
 }
 
-function processAndForward(incommingPackage) {
+async function processAndForward(incommingPackage) {
+    // simulate complicated processing
+    // also makes my plan at render.com last longer (I think)
+    await new Promise(resolve => setTimeout(resolve, 1000))
     incommingPackage.bounceCount += 1
     incommingPackage.number = randomizeNewNumber(incommingPackage.number)
     currentPackage = incommingPackage
@@ -124,7 +127,7 @@ app.get('/stream', (req, res) => {
 
 app.post('/bounce', async (req, res) => {
     logger.debug('POST: /bounce') // log as debug to avoid flooding logs
-    processAndForward(req.body)
+    await processAndForward(req.body)
     res.send('ok')
 })
 
