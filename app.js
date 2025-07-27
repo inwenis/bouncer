@@ -66,7 +66,7 @@ function autoStartBounce() {
             logger.info('Bouncing initial package to next node...')
             const result = await safePostBounce(NEXT_NODE, INITIAL_PACKAGE)
             logger.info(`Initial package bounce result: ${result}`)
-        }, 10000)
+        }, 10_000)
     } else {
         logger.info('AUTO_START_BOUNCE is disabled, no initial bounce will occur.')
     }
