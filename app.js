@@ -4,6 +4,7 @@ const axios = require('axios')
 const axiosRetry = require('axios-retry').default;
 const { AxiosError } = require('axios')
 const humanizeDuration = require('humanize-duration')
+const config = require('config')
 
 // specify timezone so logs are in the same tz regardless of machine
 process.env.TZ = "Europe/Warsaw"
@@ -25,9 +26,10 @@ function logRetry(retryCount, error, requestConfig) {
 
 axiosRetry(axios, { retries: 10, retryDelay: axiosRetry.exponentialDelay, onRetry: logRetry})
 
-const PORT              = process.env.PORT              || 3000
-const NEXT_NODE         = process.env.NEXT_NODE         || 'http://localhost:3000'
-const AUTO_START_BOUNCE = process.env.AUTO_START_BOUNCE || false
+const PORT                       = config.get('port')
+const NEXT_NODE                  = config.get('nextNode')
+const AUTO_START_BOUNCE          = config.get('autoStartBounce')
+const AUTO_START_BOUNCE_DELAY_MS = config.get('autoStartBounceDelayMs')
 const INITIAL_PACKAGE = {
     start: Date.now(),
     bounceCount: 0,
@@ -66,7 +68,7 @@ function autoStartBounce() {
             logger.info('Bouncing initial package to next node...')
             const result = await safePostBounce(NEXT_NODE, INITIAL_PACKAGE)
             logger.info(`Initial package bounce result: ${result}`)
-        }, 10_000)
+        }, AUTO_START_BOUNCE_DELAY_MS)
     } else {
         logger.info('AUTO_START_BOUNCE is disabled, no initial bounce will occur.')
     }
