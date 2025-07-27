@@ -19,7 +19,11 @@ const logger = pino({
   }
 })
 
-axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay })
+function logRetry(retryCount, error, requestConfig) {
+    logger.warn({ retryCount, url: requestConfig.url, code: error.code }, `Retrying request due to error`)
+}
+
+axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay, onRetry: logRetry})
 
 const PORT              = process.env.PORT              || 3000
 const NEXT_NODE         = process.env.NEXT_NODE         || 'http://localhost:3000'
