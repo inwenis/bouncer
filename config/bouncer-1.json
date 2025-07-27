@@ -3,5 +3,13 @@
     "nextNode": "https://bouncer-2.onrender.com",
     "clientPushMessagesDelayMs": 1000,
     "autoStartBounce": true,
-    "autoStartBounceDelayMs": 1000
+    "autoStartBounceDelayMs": 1000,
+    "pino": {
+        "transport": {
+            "target": "pino-pretty",
+            "options": {
+                "colorize": false
+            }
+        }
+    }
 }

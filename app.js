@@ -11,14 +11,7 @@ process.env.TZ = "Europe/Warsaw"
 
 // I use pino-pretty also in produciton because it's easier to work with logs in render.com
 // in prettyfied format
-const logger = pino({
-  transport: {
-    target: 'pino-pretty',
-    options: {
-      colorize: false
-    }
-  }
-})
+const logger = pino(config.get('pino'))
 
 function logRetry(retryCount, error, requestConfig) {
     logger.warn({ retryCount, url: requestConfig.url, code: error.code }, `Retrying request due to error`)

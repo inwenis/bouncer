@@ -3,5 +3,13 @@
     "nextNode": "http://localhost:3000",
     "clientPushMessagesDelayMs": 50,
     "autoStartBounce": true,
-    "autoStartBounceDelayMs": 500
+    "autoStartBounceDelayMs": 500,
+    "pino": {
+        "transport": {
+            "target": "pino-pretty",
+            "options": {
+                "colorize": true
+            }
+        }
+    }
 }
