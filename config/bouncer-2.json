@@ -1,0 +1,5 @@
+{
+    "port": 3000,
+    "nextNode": "https://bouncer-3.onrender.com",
+    "autoStartBounce": false
+}
