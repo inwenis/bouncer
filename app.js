@@ -26,10 +26,11 @@ function logRetry(retryCount, error, requestConfig) {
 
 axiosRetry(axios, { retries: 10, retryDelay: axiosRetry.exponentialDelay, onRetry: logRetry})
 
-const PORT                       = config.get('port')
-const NEXT_NODE                  = config.get('nextNode')
-const AUTO_START_BOUNCE          = config.get('autoStartBounce')
-const AUTO_START_BOUNCE_DELAY_MS = config.get('autoStartBounceDelayMs')
+const PORT                          = config.get('port')
+const NEXT_NODE                     = config.get('nextNode')
+const AUTO_START_BOUNCE             = config.get('autoStartBounce')
+const AUTO_START_BOUNCE_DELAY_MS    = config.get('autoStartBounceDelayMs')
+const CLIENT_PUSH_MESSAGES_DELAY_MS = config.get('clientPushMessagesDelayMs')
 const INITIAL_PACKAGE = {
     start: Date.now(),
     bounceCount: 0,
@@ -98,8 +99,8 @@ function startEventStream(res) {
     res.flushHeaders()
 }
 
-function startUpdateTimer(res, req, delay) {
-    const interval = setInterval(sendUpdate(res), delay)
+function startUpdateTimer(res, req) {
+    const interval = setInterval(sendUpdate(res), CLIENT_PUSH_MESSAGES_DELAY_MS)
 
     req.on('close', () => {
         clearInterval(interval)
@@ -128,7 +129,7 @@ app.get('/', (req, res) => {
 app.get('/stream', (req, res) => {
     logger.info('GET: /stream')
     startEventStream(res)
-    startUpdateTimer(res, req, 1000)
+    startUpdateTimer(res, req)
 })
 
 app.post('/bounce', async (req, res) => {
