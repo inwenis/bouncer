@@ -9,6 +9,21 @@ function Remove-TerminalControlCharacters {
     }
 }
 
+function Update-TimeZone {
+    [CmdletBinding()]
+    param (
+        [Parameter(ValueFromPipeline = $true, Mandatory = $true)]
+        [string]$Line
+    )
+    process {
+        $match = $Line | Select-String -pattern "^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})"
+        $dateAsStr = $match.Matches.Groups[1].Value
+        $dateParsed = [System.DateTimeOffset]::Parse($dateAsStr, $null, [System.Globalization.DateTimeStyles]::AssumeUniversal)
+        $dateLocal = $dateParsed.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")
+        $Line -replace $dateAsStr, $dateLocal
+    }
+}
+
 # By default PowerShell captures bytes and interprets them as a string using [Console]::OutputEncoding
 # which by default (for me) is code page 850. This means that if the external commands outputs UTF-8 characters,
 # some will be misinterpreted (like emojis).
@@ -16,8 +31,8 @@ function Remove-TerminalControlCharacters {
 $currentEncoding = [Console]::OutputEncoding
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-render logs -o text -r bouncer-1 | Remove-TerminalControlCharacters > logs-1.log
-render logs -o text -r bouncer-2 | Remove-TerminalControlCharacters > logs-2.log
-render logs -o text -r bouncer-3 | Remove-TerminalControlCharacters > logs-3.log
+render logs -o text -r bouncer-1 | Remove-TerminalControlCharacters | Update-TimeZone > logs-1.log
+render logs -o text -r bouncer-2 | Remove-TerminalControlCharacters | Update-TimeZone > logs-2.log
+render logs -o text -r bouncer-3 | Remove-TerminalControlCharacters | Update-TimeZone > logs-3.log
 
 [Console]::OutputEncoding = $currentEncoding
