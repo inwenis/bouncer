@@ -66,7 +66,7 @@ async function safePostBounce(dest, package) {
 
 function autoStartBounce() {
     if (AUTO_START_BOUNCE) {
-        logger.info('AUTO_START_BOUNCE is enabled, starting bounce process in 10 seconds...')
+        logger.info(`AUTO_START_BOUNCE is enabled, starting bounce process in ${humanizeDuration(AUTO_START_BOUNCE_DELAY_MS)}...`)
         setTimeout(async () => {
             logger.info('Bouncing initial package to next node...')
             const result = await safePostBounce(NEXT_NODE, INITIAL_PACKAGE)
