@@ -31,8 +31,11 @@ function Update-TimeZone {
 $currentEncoding = [Console]::OutputEncoding
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
+Write-Output "Downloading logs from bouncer-1..."
 render logs -o text -r bouncer-1 | Remove-TerminalControlCharacters | Update-TimeZone > logs-1.log
+Write-Output "Downloading logs from bouncer-2..."
 render logs -o text -r bouncer-2 | Remove-TerminalControlCharacters | Update-TimeZone > logs-2.log
+Write-Output "Downloading logs from bouncer-3..."
 render logs -o text -r bouncer-3 | Remove-TerminalControlCharacters | Update-TimeZone > logs-3.log
 
 [Console]::OutputEncoding = $currentEncoding
