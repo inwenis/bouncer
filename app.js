@@ -1,3 +1,4 @@
+const fs = require('fs')
 const express = require('express')
 const pino = require('pino')
 const axios = require('axios')
@@ -39,6 +40,8 @@ const INITIAL_PACKAGE = {
     number: 42
 }
 
+const indexTemplate = fs.readFileSync(__dirname + '/index.html', 'utf-8')
+let index = indexTemplate
 let currentPackage = null
 
 function randomizeNewNumber() {
@@ -77,18 +80,18 @@ function autoStartBounce() {
     }
 }
 
-function sendUpdate(res) {
-    return () => {
-        if (currentPackage) {
-            const now = Date.now()
-            const updated = {
-                ...currentPackage,
-                elapsed: humanizeDuration(now - currentPackage.start),
-                lastUpdated: new Date(now).toISOString()
-            }
-            const asAstring = JSON.stringify(updated, null, 2).replaceAll('\n', '\\n')
-            res.write(`data: ${asAstring}\n\n`)
+function currentPackageToJson() {
+    if (currentPackage) {
+        const now = Date.now()
+        const updated = {
+            ...currentPackage,
+            elapsed: humanizeDuration(now - currentPackage.start),
+            lastUpdated: new Date(now).toISOString()
         }
+        const asAstring = JSON.stringify(updated, null, 2)
+        return asAstring
+    } else {
+        return '{}'
     }
 }
 
@@ -102,7 +105,11 @@ function startEventStream(res) {
 }
 
 function startUpdateTimer(res, req) {
-    const interval = setInterval(sendUpdate(res), CLIENT_PUSH_MESSAGES_DELAY_MS)
+    const interval = setInterval(() => {
+        // for transfering we need to escape newlines to ensure the whole json is transferent as a single event
+        const asAstring = currentPackageToJson().replaceAll('\n', '\\n')
+        res.write(`data: ${asAstring}\n\n`)
+    }, CLIENT_PUSH_MESSAGES_DELAY_MS)
 
     req.on('close', () => {
         clearInterval(interval)
@@ -125,7 +132,7 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
     logger.info('GET: /')
-    res.sendFile(__dirname + '/index.html')
+    res.send(index)
 })
 
 app.get('/stream', (req, res) => {
@@ -145,3 +152,7 @@ app.listen(PORT)
 logger.info(`Bouncer listening at http://localhost:${PORT}`)
 
 autoStartBounce()
+
+setInterval(() => {
+    index = indexTemplate.replace('xxx', currentPackageToJson())
+}, 1000)
