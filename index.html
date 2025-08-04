@@ -2,9 +2,11 @@
 <html>
     <body>
         <h1>Bouncer</h1>
-        <pre id="output">
+        <div>
+            <pre id="output">
 xxx
-        </pre>
+            </pre>
+        </div>
         <script>
             const eventSource = new EventSource('/stream')
             eventSource.onmessage = function(event) {
