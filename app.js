@@ -17,7 +17,16 @@ function logRetry(retryCount, error, requestConfig) {
     logger.warn({ retryCount, url: requestConfig.url, code: error.code }, `Retrying request due to error`)
 }
 
-axiosRetry(axios, { retries: 10, retryDelay: axiosRetry.exponentialDelay, onRetry: logRetry, retryCondition: () => true })
+const retryPolicy = {
+    retries: 10,
+    retryDelay: axiosRetry.exponentialDelay,
+    onRetry: logRetry,
+    // by default POST requests are not retried because they
+    // are not idempotent, we use POST request here and we want to retry them
+    retryCondition: () => true
+}
+
+axiosRetry(axios, retryPolicy)
 
 const PORT                          = config.get('port')
 const NEXT_NODE                     = config.get('nextNode')
