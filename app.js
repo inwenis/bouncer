@@ -17,7 +17,7 @@ function logRetry(retryCount, error, requestConfig) {
     logger.warn({ retryCount, url: requestConfig.url, code: error.code }, `Retrying request due to error`)
 }
 
-axiosRetry(axios, { retries: 10, retryDelay: axiosRetry.exponentialDelay, onRetry: logRetry })
+axiosRetry(axios, { retries: 10, retryDelay: axiosRetry.exponentialDelay, onRetry: logRetry, retryCondition: () => true })
 
 const PORT                          = config.get('port')
 const NEXT_NODE                     = config.get('nextNode')
