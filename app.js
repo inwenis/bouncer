@@ -1,4 +1,6 @@
 const fs = require('fs')
+var https = require('https')
+var http = require('http')
 const express = require('express')
 const pino = require('pino')
 const axios = require('axios')
@@ -147,9 +149,16 @@ app.post('/bounce', async (req, res) => {
     res.send('ok')
 })
 
-app.listen(PORT)
+var options = {
+  key:  fs.readFileSync('c:/workbench/key.pem'),
+  cert: fs.readFileSync('c:/workbench/cert.pem'),
+  //ca:   fs.readFileSync('c:/workbench/ca.pem')
+}
 
-logger.info(`Bouncer listening at http://localhost:${PORT}`)
+http.createServer(app).listen(80)
+https.createServer(options, app).listen(443)
+
+// logger.info(`Bouncer listening at http://localhost:${PORT}`)
 
 autoStartBounce()
 
