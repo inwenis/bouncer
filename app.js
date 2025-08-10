@@ -42,6 +42,15 @@ const INITIAL_PACKAGE = {
     bounceCount: 0,
     number: 42
 }
+const SSL_KEY_PATH  = config.get('sslKeyPath')
+const SSL_CERT_PATH = config.get('sslCertPath')
+const SSL_CA_PATH   = config.has('sslCaPath') ? config.get('sslCaPath') : undefined
+
+var options = {
+    key:  fs.readFileSync(SSL_KEY_PATH),
+    cert: fs.readFileSync(SSL_CERT_PATH),
+    ca:   SSL_CA_PATH ? fs.readFileSync(SSL_CA_PATH) : undefined
+}
 
 const indexTemplate = fs.readFileSync(__dirname + '/index.html', 'utf-8')
 let index = indexTemplate
@@ -150,11 +159,7 @@ app.post('/bounce', async (req, res) => {
     res.send('ok')
 })
 
-var options = {
-  key:  fs.readFileSync('c:/workbench/key.pem'),
-  cert: fs.readFileSync('c:/workbench/cert.pem'),
-  //ca:   fs.readFileSync('c:/workbench/ca.pem')
-}
+
 
 http.createServer(app).listen(PORT_HTTP)
 https.createServer(options, app).listen(PORT_HTTPS)
