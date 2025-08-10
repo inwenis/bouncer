@@ -31,7 +31,8 @@ const retryPolicy = {
 
 axiosRetry(axios, retryPolicy)
 
-const PORT                          = config.get('port')
+const PORT_HTTP                     = config.get('portHttp')
+const PORT_HTTPS                    = config.get('portHttps')
 const NEXT_NODE                     = config.get('nextNode')
 const AUTO_START_BOUNCE             = config.get('autoStartBounce')
 const AUTO_START_BOUNCE_DELAY_MS    = config.get('autoStartBounceDelayMs')
@@ -155,10 +156,11 @@ var options = {
   //ca:   fs.readFileSync('c:/workbench/ca.pem')
 }
 
-http.createServer(app).listen(80)
-https.createServer(options, app).listen(443)
+http.createServer(app).listen(PORT_HTTP)
+https.createServer(options, app).listen(PORT_HTTPS)
 
-// logger.info(`Bouncer listening at http://localhost:${PORT}`)
+logger.info(`Bouncer listening at http://localhost:${PORT_HTTP}`)
+logger.info(`Bouncer listening at https://localhost:${PORT_HTTPS}`)
 
 autoStartBounce()
 
