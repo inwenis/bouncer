@@ -1,4 +1,6 @@
 const fs = require('fs')
+var https = require('https')
+var http = require('http')
 const express = require('express')
 const pino = require('pino')
 const axios = require('axios')
@@ -29,7 +31,8 @@ const retryPolicy = {
 
 axiosRetry(axios, retryPolicy)
 
-const PORT                          = config.get('port')
+const PORT_HTTP                     = config.get('portHttp')
+const PORT_HTTPS                    = config.get('portHttps')
 const NEXT_NODE                     = config.get('nextNode')
 const AUTO_START_BOUNCE             = config.get('autoStartBounce')
 const AUTO_START_BOUNCE_DELAY_MS    = config.get('autoStartBounceDelayMs')
@@ -38,6 +41,15 @@ const INITIAL_PACKAGE = {
     start: Date.now(),
     bounceCount: 0,
     number: 42
+}
+const SSL_KEY_PATH  = config.get('sslKeyPath')
+const SSL_CERT_PATH = config.get('sslCertPath')
+const SSL_CA_PATH   = config.has('sslCaPath') ? config.get('sslCaPath') : undefined
+
+var options = {
+    key:  fs.readFileSync(SSL_KEY_PATH),
+    cert: fs.readFileSync(SSL_CERT_PATH),
+    ca:   SSL_CA_PATH ? fs.readFileSync(SSL_CA_PATH) : undefined
 }
 
 const indexTemplate = fs.readFileSync(__dirname + '/index.html', 'utf-8')
@@ -147,9 +159,13 @@ app.post('/bounce', async (req, res) => {
     res.send('ok')
 })
 
-app.listen(PORT)
 
-logger.info(`Bouncer listening at http://localhost:${PORT}`)
+
+http.createServer(app).listen(PORT_HTTP)
+https.createServer(options, app).listen(PORT_HTTPS)
+
+logger.info(`Bouncer listening at http://localhost:${PORT_HTTP}`)
+logger.info(`Bouncer listening at https://localhost:${PORT_HTTPS}`)
 
 autoStartBounce()
 

@@ -1,5 +1,8 @@
 {
-    "port": 3000,
+    "portHttp": 3000,
+    "portHttps": 3443,
+    "sslKeyPath": "./ssl/key.pem",
+    "sslCertPath": "./ssl/cert.pem",
     "nextNode": "http://localhost:3000",
     "clientPushMessagesDelayMs": 50,
     "autoStartBounce": true,
