@@ -42,14 +42,14 @@ const INITIAL_PACKAGE = {
     bounceCount: 0,
     number: 42
 }
-const SSL_KEY_PATH  = config.get('sslKeyPath')
-const SSL_CERT_PATH = config.get('sslCertPath')
-const SSL_CA_PATH   = config.has('sslCaPath') ? config.get('sslCaPath') : undefined
+const SSL_KEY_PATH  = config.has('sslKeyPath')  ? fs.readFileSync(config.get('sslKeyPath'))  : undefined
+const SSL_CERT_PATH = config.has('sslCertPath') ? fs.readFileSync(config.get('sslCertPath')) : undefined
+const SSL_CA_PATH   = config.has('sslCaPath')   ? fs.readFileSync(config.get('sslCaPath'))   : undefined
 
 var options = {
-    key:  fs.readFileSync(SSL_KEY_PATH),
-    cert: fs.readFileSync(SSL_CERT_PATH),
-    ca:   SSL_CA_PATH ? fs.readFileSync(SSL_CA_PATH) : undefined
+    key:  SSL_KEY_PATH,
+    cert: SSL_CERT_PATH,
+    ca:   SSL_CA_PATH
 }
 
 const indexTemplate = fs.readFileSync(__dirname + '/index.html', 'utf-8')

@@ -1,0 +1,15 @@
+{
+    "portHttp": 80,
+    "portHttps": 443,
+    "nextNode": "https://bounce.ovh",
+    "clientPushMessagesDelayMs": 1000,
+    "autoStartBounce": false,
+    "pino": {
+        "transport": {
+            "target": "pino-pretty",
+            "options": {
+                "colorize": true
+            }
+        }
+    }
+}
