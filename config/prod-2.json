@@ -1,7 +1,7 @@
 {
     "portHttp": 80,
     "portHttps": 443,
-    "nextNode": "http://5.22.219.66",
+    "nextNode": "http://prod-3.bounce.ovh",
     "clientPushMessagesDelayMs": 1000,
     "autoStartBounce": false,
     "pino": {

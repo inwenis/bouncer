@@ -25,9 +25,9 @@ Because I haven't setup logs integration it's easier view pretty logs after ssh-
 
 # Connect to prod servers
 ```PowerShell
-ssh root@bounce.ovh     # prod-1
-ssh root@185.70.196.252 # prod-2
-ssh root@5.22.219.66    # prod-3
+ssh root@prod-1.bounce.ovh # also available as bounce.ovh
+ssh root@prod-2.bounce.ovh
+ssh root@prod-3.bounce.ovh
 ```
 
 # Setup server

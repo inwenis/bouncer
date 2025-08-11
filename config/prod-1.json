@@ -4,7 +4,7 @@
     "sslKeyPath": "/etc/letsencrypt/live/bounce.ovh/privkey.pem",
     "sslCertPath": "/etc/letsencrypt/live/bounce.ovh/fullchain.pem",
     "sslCaPath": "/etc/letsencrypt/live/bounce.ovh/fullchain.pem",
-    "nextNode": "http://185.70.196.252",
+    "nextNode": "http://prod-2.bounce.ovh",
     "clientPushMessagesDelayMs": 1000,
     "autoStartBounce": true,
     "autoStartBounceDelayMs": 5000,
