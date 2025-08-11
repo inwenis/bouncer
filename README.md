@@ -8,14 +8,11 @@ npm install
 node app.js
 ```
 
-# How to get logs?
-`.\logs.ps1`
-
 # TODOs
 - Try out collatz conjecture
 
 # Why do I use pretty-print in prod?
-I did not setup logs integration so for now it's easier to read pretty logs on https://dashboard.render.com/ .
+Because I haven't setup logs integration it's easier view pretty logs after ssh-ing into a PROD machine.
 
 # Used to make HTTPS work
 - https://letsencrypt.org/getting-started/
