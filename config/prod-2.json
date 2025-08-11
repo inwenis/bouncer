@@ -1,7 +1,7 @@
 {
     "portHttp": 80,
     "portHttps": 443,
-    "nextNode": "https://5.22.219.66",
+    "nextNode": "http://5.22.219.66",
     "clientPushMessagesDelayMs": 1000,
     "autoStartBounce": false,
     "pino": {
