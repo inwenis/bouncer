@@ -25,7 +25,7 @@ Because I haven't setup logs integration it's easier view pretty logs after ssh-
 
 # Connect to prod servers
 ```
-ssh root@94.237.96.239
-ssh root@185-70-196-252.pl-waw1.upcloud.host
-ssh root@0478-5eff-fea0-2bca.v6.es-mad1.upcloud.host
+ssh root@bounce.ovh
+ssh root@185.70.196.252
+ssh root@5.22.219.66
 ```
