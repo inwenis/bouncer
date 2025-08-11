@@ -24,8 +24,8 @@ Because I haven't setup logs integration it's easier view pretty logs after ssh-
 - https://snapcraft.io/docs/installing-snap-on-ubuntu
 
 # Connect to prod servers
-```
-ssh root@bounce.ovh
-ssh root@185.70.196.252
-ssh root@5.22.219.66
+```PowerShell
+ssh root@bounce.ovh     # prod-1
+ssh root@185.70.196.252 # prod-2
+ssh root@5.22.219.66    # prod-3
 ```
