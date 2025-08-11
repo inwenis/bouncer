@@ -29,3 +29,15 @@ ssh root@bounce.ovh     # prod-1
 ssh root@185.70.196.252 # prod-2
 ssh root@5.22.219.66    # prod-3
 ```
+
+# Setup server
+
+```bash
+sudo apt update
+sudo apt --yes install nodejs
+sudo apt --yes install npm
+git clone https://github.com/inwenis/bouncer
+cd bouncer
+npm install
+chmod +x run.sh
+```
