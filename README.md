@@ -34,7 +34,6 @@ sudo apt --yes install npm
 git clone https://github.com/inwenis/bouncer
 cd bouncer
 npm install
-chmod +x run.sh
 ```
 
 ## Certificate setup
