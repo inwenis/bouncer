@@ -1,10 +1,10 @@
 {
     "portHttp": 80,
     "portHttps": 443,
-    "sslKeyPath": "/etc/letsencrypt/live/bounce.ovh/privkey.pem",
+    "sslKeyPath":  "/etc/letsencrypt/live/bounce.ovh/privkey.pem",
     "sslCertPath": "/etc/letsencrypt/live/bounce.ovh/fullchain.pem",
-    "sslCaPath": "/etc/letsencrypt/live/bounce.ovh/fullchain.pem",
-    "nextNode": "http://prod-2.bounce.ovh",
+    "sslCaPath":   "/etc/letsencrypt/live/bounce.ovh/fullchain.pem",
+    "nextNode": "https://prod-2.bounce.ovh",
     "clientPushMessagesDelayMs": 1000,
     "autoStartBounce": true,
     "autoStartBounceDelayMs": 5000,
