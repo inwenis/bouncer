@@ -5,7 +5,7 @@
     "sslCertPath": "/etc/letsencrypt/live/prod-2.bounce.ovh/fullchain.pem",
     "sslCaPath":   "/etc/letsencrypt/live/prod-2.bounce.ovh/fullchain.pem",
     "nextNode": "https://prod-3.bounce.ovh",
-    "clientPushMessagesDelayMs": 1000,
+    "clientPushMessagesDelayMs": 50,
     "autoStartBounce": false,
     "pino": {
         "transport": {
