@@ -18,11 +18,6 @@ node app.js
 # Why do I use pretty-print in prod?
 Because I haven't setup logs integration it's easier view pretty logs after ssh-ing into a PROD machine.
 
-# Used to make HTTPS work
-- https://letsencrypt.org/getting-started/
-- https://certbot.eff.org/instructions?ws=other&os=snap
-- https://snapcraft.io/docs/installing-snap-on-ubuntu
-
 # Connect to prod servers
 ```PowerShell
 ssh root@prod-1.bounce.ovh # also available as bounce.ovh
@@ -41,3 +36,18 @@ cd bouncer
 npm install
 chmod +x run.sh
 ```
+
+## Certificate setup
+```bash
+sudo apt update
+sudo apt install snapd
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+pkill -f "node app.js"
+sudo certbot certonly --standalone
+```
+
+References:
+- https://letsencrypt.org/getting-started/
+- https://certbot.eff.org/instructions?ws=other&os=snap
+- https://snapcraft.io/docs/installing-snap-on-ubuntu
