@@ -13,7 +13,7 @@ node app.js
 ```
 
 # TODOs
-- Try out collatz conjecture
+- write a script to get logs from all machines
 
 # Why do I use pretty-print in prod?
 Because I haven't setup logs integration it's easier view pretty logs after ssh-ing into a PROD machine.
