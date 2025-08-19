@@ -14,6 +14,7 @@ node app.js
 
 # TODOs
 - write a script to get logs from all machines
+- create a better front-end
 
 # Why do I use pretty-print in prod?
 Because I haven't setup logs integration it's easier view pretty logs after ssh-ing into a PROD machine.
